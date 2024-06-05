@@ -1,0 +1,51 @@
+"""
+USER ID: 031658430
+PW: 2Z^~d1gN
+HOST NAME: CECS-Postgresql
+DATABASE: 2024SummerS01
+Schema Name: 031658430
+
+
+"""
+
+def add_department(session: Session):
+    unique_name: bool = False
+    name: str = ''
+    abbreviation: str = ''
+    chairName: str = ''
+    building: str = ''
+    office: int = 0
+    description: str = ''
+
+    while not unique_name:
+        name = input("Department name --> ")
+        abbreviation = input("Department abbreviation--> ")
+        chairName = input("Chair name --> ")
+        building = input("Building name --> ")
+        office = input("Office number --> ")
+        description = input("Department description --> ")
+        unique_name = True
+
+        errors = []
+        if session.query(Department).filter(Department.abbreviation == abbreviation).count() > 0:
+            unique = False
+            errors.append("Abbreviation must be unique.")
+        if session.query(Department).filter(Department.chairName == chairName).count() > 0:
+            unique = False
+            errors.append("Chair name must be unique.")
+        if session.query(Department).filter(Department.building == building, Department.office == office).count() > 0:
+            unique = False
+            errors.append("Building and office combination must be unique.")
+        if session.query(Department).filter(Department.description == description).count() > 0:
+            unique = False
+            errors.append("Description must be unique.")
+
+        if not unique_name:
+            print("Errors found:")
+            for error in errors:
+                print(f" - {error}")
+
+    newDepartment = Department(name, abbreviation, chairName, building, office, description)
+    session.add(newDepartment)
+
+
