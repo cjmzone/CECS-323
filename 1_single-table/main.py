@@ -219,11 +219,11 @@ def add_department(session: Session):
 def select_department(sess: Session) -> Department:
     found: bool = False
     while not found:
-        criteria = input("Enter department name, abbreviation, or chair name to select --> ")
+        selected = input("Enter department name, abbreviation, or chair name to select --> ")
         departments = sess.query(Department).filter(
-            (Department.name == criteria) |
-            (Department.abbreviation == criteria) |
-            (Department.chairName == criteria)
+            (Department.name == selected) |
+            (Department.abbreviation == selected) |
+            (Department.chairName == selected)
         ).all()
 
         if len(departments) == 1:
